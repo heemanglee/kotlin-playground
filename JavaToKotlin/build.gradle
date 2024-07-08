@@ -25,6 +25,9 @@ dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
     // java.lang.ClassNotFoundException: kotlin.reflect.full.KClasses
     implementation 'org.jetbrains.kotlin:kotlin-reflect:1.6.21'
+    // Kotlin에서 HTTP 요청 시에 JSON parse error 해결
+    // 기존의 Jackson 라이브러리는 Java를 위한 것
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.13.3'
     runtimeOnly 'com.h2database:h2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
