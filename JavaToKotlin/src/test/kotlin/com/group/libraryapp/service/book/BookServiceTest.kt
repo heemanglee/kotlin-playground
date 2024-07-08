@@ -7,6 +7,7 @@ import com.group.libraryapp.domain.user.User
 import com.group.libraryapp.domain.user.UserRepository
 import com.group.libraryapp.domain.user.loanhistory.UserLoanHistory
 import com.group.libraryapp.domain.user.loanhistory.UserLoanHistoryRepository
+import com.group.libraryapp.domain.user.loanhistory.UserLoanStatus
 import com.group.libraryapp.dto.book.request.BookLoanRequest
 import com.group.libraryapp.dto.book.request.BookRequest
 import com.group.libraryapp.dto.book.request.BookReturnRequest
@@ -70,7 +71,7 @@ class BookServiceTest @Autowired constructor(
         assertThat(results[0].bookName).isEqualTo("이상한 나라의 엘리스")
         assertThat(results[0].user.name).isEqualTo("이희망")
         assertThat(results[0].user.id).isEqualTo(savedUser.id)
-        assertThat(results[0].isReturn).isEqualTo(false)
+        assertThat(results[0].status).isEqualTo(UserLoanStatus.LOANED)
     }
 
     @Test
@@ -86,13 +87,7 @@ class BookServiceTest @Autowired constructor(
             )
         )
         val request = BookLoanRequest("이희망", "이상한 나라의 엘리스")
-        userLoanHistoryRepository.save(
-            UserLoanHistory(
-                savedUser,
-                savedBook.name,
-                false
-            )
-        )
+        userLoanHistoryRepository.save(UserLoanHistory.fixture(savedUser, "이상한 나라의 엘리스"))
 
         // when, then
         val message = assertThrows<IllegalArgumentException> {
@@ -114,14 +109,8 @@ class BookServiceTest @Autowired constructor(
                 null
             )
         )
-        userLoanHistoryRepository.save(
-            UserLoanHistory(
-                savedUser,
-                savedBook.name,
-                false
-            )
-        )
-        val request = BookReturnRequest(savedUser.name, savedBook.name)
+        userLoanHistoryRepository.save(UserLoanHistory.fixture(savedUser, "이상한 나라의 엘리스"))
+        val request = BookReturnRequest("이희망", "이상한 나라의 엘리스")
 
         // when
         bookService.returnBook(request)
@@ -129,6 +118,7 @@ class BookServiceTest @Autowired constructor(
         // then
         val results = userLoanHistoryRepository.findAll()
         assertThat(results).hasSize(1)
-        assertThat(results[0].isReturn).isTrue
+        assertThat(results[0].status).isEqualTo(UserLoanStatus.RETURNED)
     }
+
 }
