@@ -5,6 +5,9 @@ import com.group.libraryapp.domain.user.UserRepository
 import com.group.libraryapp.dto.user.request.UserCreateRequest
 import com.group.libraryapp.dto.user.request.UserUpdateRequest
 import com.group.libraryapp.dto.user.response.UserResponse
+import com.group.libraryapp.util.fail
+import com.group.libraryapp.util.findByIdOrThrow
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -34,15 +37,21 @@ class UserService(
 
     @Transactional
     fun updateUserName(request: UserUpdateRequest) {
-        val user = userRepository.findById(request.id)
-            .orElseThrow(::IllegalArgumentException)
+        // Java + JPA -> findById()는 Optional을 반환한다.
+//        val user = userRepository.findById(request.id)
+//            .orElseThrow(::IllegalArgumentException)
+
+        // Kotlin + JPA -> findById() 대신에 확장함수를 구현한 CrudRepositoryExtension 사용한다.
+//        val user = userRepository.findByIdOrNull(request.id) ?: fail()
+
+        // CrudRepositoryExtension.findByIdOrNull()의 확장함수인 findByIdOrThrow()
+        val user = userRepository.findByIdOrThrow(request.id)
         user.updateName(request.name)
     }
 
     @Transactional
     fun deleteUser(name: String) {
-        val user = userRepository.findByName(name)
-            .orElseThrow(::IllegalArgumentException)
+        val user = userRepository.findByName(name) ?: fail()
         userRepository.delete(user)
     }
 }
