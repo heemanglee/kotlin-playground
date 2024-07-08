@@ -13,6 +13,7 @@ import com.group.libraryapp.dto.book.request.BookRequest
 import com.group.libraryapp.dto.book.request.BookReturnRequest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
@@ -119,6 +120,43 @@ class BookServiceTest @Autowired constructor(
         val results = userLoanHistoryRepository.findAll()
         assertThat(results).hasSize(1)
         assertThat(results[0].status).isEqualTo(UserLoanStatus.RETURNED)
+    }
+
+    @Test
+    @DisplayName("책 대여 권수를 정상 확인한다.")
+    fun countLoanedBookTest() {
+        // given
+        var savedUser = userRepository.save(User("A"))
+        userLoanHistoryRepository.saveAll(listOf(
+            UserLoanHistory.fixture(savedUser, "bookA"),
+            UserLoanHistory.fixture(savedUser, "bookB", UserLoanStatus.RETURNED),
+            UserLoanHistory.fixture(savedUser, "bookC", UserLoanStatus.RETURNED)
+        ))
+
+        // when
+        val result = bookService.countLoanedBook()
+
+        // then
+        assertThat(result).isEqualTo(1)
+    }
+
+    @Test
+    @DisplayName("책 분야 별로 대여 권수를 정상 확인한다.")
+    fun getBookStatisticsTest() {
+        // given
+        bookRepository.saveAll(listOf(
+            Book.fixture("bookA", BookType.COMPUTER),
+            Book.fixture("bookB", BookType.COMPUTER),
+            Book.fixture("bookC", BookType.SCIENCE)
+        ))
+
+        // when
+        var results = bookService.getBookStatistics()
+
+        // then
+        assertThat(results).hasSize(2)
+        assertThat(results.first { dto -> dto.type == BookType.COMPUTER }.count).isEqualTo(2)
+        assertThat(results.first { dto -> dto.type == BookType.SCIENCE }.count).isEqualTo(1)
     }
 
 }

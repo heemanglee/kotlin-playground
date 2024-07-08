@@ -8,6 +8,7 @@ import com.group.libraryapp.domain.user.loanhistory.UserLoanStatus
 import com.group.libraryapp.dto.book.request.BookLoanRequest
 import com.group.libraryapp.dto.book.request.BookRequest
 import com.group.libraryapp.dto.book.request.BookReturnRequest
+import com.group.libraryapp.dto.book.response.BookStatResponse
 import com.group.libraryapp.util.fail
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -28,7 +29,11 @@ class BookService(
     @Transactional
     fun loanBook(request: BookLoanRequest) {
         val book = bookRepository.findByName(request.bookName) ?: fail()
-        if (userLoanHistoryRepository.findByBookNameAndStatus(book.name, UserLoanStatus.LOANED) != null) {
+        if (userLoanHistoryRepository.findByBookNameAndStatus(
+                book.name,
+                UserLoanStatus.LOANED
+            ) != null
+        ) {
             throw IllegalArgumentException("진작 대출되어 있는 책입니다");
         }
 
@@ -40,5 +45,24 @@ class BookService(
     fun returnBook(request: BookReturnRequest) {
         val user = userRepository.findByName(request.userName) ?: fail()
         user.returnBook(request.bookName)
+    }
+
+    @Transactional(readOnly = true)
+    fun countLoanedBook(): Int {
+        return userLoanHistoryRepository.findAllByStatus(UserLoanStatus.LOANED).size
+    }
+
+    @Transactional(readOnly = true)
+    fun getBookStatistics(): List<BookStatResponse> {
+//        val results = mutableListOf<BookStatResponse>()
+//        val books = bookRepository.findAll()
+//        for (book in books) {
+//            results.firstOrNull { dto -> dto.type == book.type }?.plusOne()
+//                ?: results.add(BookStatResponse(book.type, 1))
+//        }
+//        return results
+        return bookRepository.findAll()
+            .groupBy { book -> book.type }
+            .map { (type, books) -> BookStatResponse(type, books.size) }
     }
 }
