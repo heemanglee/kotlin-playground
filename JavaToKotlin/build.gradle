@@ -5,6 +5,9 @@ plugins {
     // Kotlin
     id 'org.jetbrains.kotlin.jvm' version '1.6.21'
     id 'org.jetbrains.kotlin.plugin.jpa' version '1.6.21'
+    // CGLIB Proxy는 Target class를 상속받아 생성하므로 open을 통한 상속 가능한 상태이어야 한다.
+    // https://cheese10yun.github.io/spring-kotlin
+    id 'org.jetbrains.kotlin.plugin.spring' version '1.6.21'
 }
 
 group = 'com.group'
