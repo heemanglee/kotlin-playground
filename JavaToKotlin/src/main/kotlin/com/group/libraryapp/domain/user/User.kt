@@ -3,6 +3,7 @@ package com.group.libraryapp.domain.user
 import com.group.libraryapp.domain.book.Book
 import com.group.libraryapp.domain.user.loanhistory.UserLoanHistory
 import com.group.libraryapp.domain.user.loanhistory.UserLoanStatus
+import java.util.Collections
 import javax.persistence.*
 
 /**
@@ -16,7 +17,7 @@ class User(
     val age: Int? = null,
 
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val userLoanHistories: MutableList<UserLoanHistory>,
+    val userLoanHistories: MutableList<UserLoanHistory> = Collections.emptyList(),
 
     @Id
     @GeneratedValue
