@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import java.util.*
 
 @SpringBootTest
 class BookServiceTest @Autowired constructor(
@@ -48,7 +49,14 @@ class BookServiceTest @Autowired constructor(
     fun loanBookTest() {
         // given
         bookRepository.save(Book("엘리스"))
-        val savedUser = userRepository.save(User("이희망", null))
+        val savedUser = userRepository.save(
+            User(
+                "이희망",
+                null,
+                Collections.emptyList(),
+                null
+            )
+        )
         val request = BookLoanRequest("이희망", "엘리스")
 
         // when
@@ -66,10 +74,27 @@ class BookServiceTest @Autowired constructor(
     @Test
     fun loanBookFailTest() {
         // given
-        val savedBook = bookRepository.save(Book("엘리스"))
-        val savedUser = userRepository.save(User("이희망", null))
+        val savedBook = bookRepository.save(
+            Book(
+                "엘리스"
+            )
+        )
+        val savedUser = userRepository.save(
+            User(
+                "이희망",
+                null,
+                Collections.emptyList(),
+                null
+            )
+        )
         val request = BookLoanRequest("이희망", "엘리스")
-        userLoanHistoryRepository.save(UserLoanHistory(savedUser, savedBook.name, false))
+        userLoanHistoryRepository.save(
+            UserLoanHistory(
+                savedUser,
+                savedBook.name,
+                false
+            )
+        )
 
         // when, then
         val message = assertThrows<IllegalArgumentException> {
@@ -82,9 +107,26 @@ class BookServiceTest @Autowired constructor(
     @Test
     fun returnBookTest() {
         // given
-        val savedBook = bookRepository.save(Book("엘리스"))
-        val savedUser = userRepository.save(User("이희망", null))
-        userLoanHistoryRepository.save(UserLoanHistory(savedUser, savedBook.name, false))
+        val savedBook = bookRepository.save(
+            Book(
+                "엘리스"
+            )
+        )
+        val savedUser = userRepository.save(
+            User(
+                "이희망",
+                null,
+                Collections.emptyList(),
+                null
+            )
+        )
+        userLoanHistoryRepository.save(
+            UserLoanHistory(
+                savedUser,
+                savedBook.name,
+                false
+            )
+        )
         val request = BookReturnRequest(savedUser.name, savedBook.name)
 
         // when

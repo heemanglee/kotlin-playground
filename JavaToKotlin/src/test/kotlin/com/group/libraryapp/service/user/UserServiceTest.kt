@@ -9,6 +9,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import java.util.*
 
 @SpringBootTest
 class UserServiceTest @Autowired constructor(
@@ -45,7 +46,10 @@ class UserServiceTest @Autowired constructor(
     fun getUsersTest() {
         // given
         userRepository.saveAll(
-            listOf(User("A", 20), User("B", null))
+            listOf(
+                User("A", 20, Collections.emptyList(), null),
+                User("B", null, Collections.emptyList(), null)
+            )
         )
 
         // when
@@ -60,8 +64,16 @@ class UserServiceTest @Autowired constructor(
     @Test
     fun updateUserNameTest() {
         // given
-        val savedUser = userRepository.save(User("이희망", 25))
-        val request = UserUpdateRequest(savedUser.id, "이희망")
+        val savedUser = userRepository.save(
+            User(
+                "이희망",
+                25,
+                Collections.emptyList(),
+                null
+            )
+        )
+        // Kotlin: Long?, Java: long이므로 null이 아님을 단언(!!)
+        val request = UserUpdateRequest(savedUser.id!!, "이희망")
 
         // when
         userService.updateUserName(request)
@@ -74,7 +86,7 @@ class UserServiceTest @Autowired constructor(
     @Test
     fun deleteUserTest() {
         // given
-        userRepository.save(User("이희망", 25))
+        userRepository.save(User("이희망", 25, Collections.emptyList(), null))
 
         // when
         userService.deleteUser("이희망")
