@@ -128,6 +128,7 @@ class UserServiceTest @Autowired constructor(
             )
         )
 
+        println("---------")
         // when
         var results = userService.getUserLoanHistories()
 
