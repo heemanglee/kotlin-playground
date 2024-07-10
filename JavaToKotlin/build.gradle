@@ -8,6 +8,8 @@ plugins {
     // CGLIB Proxy는 Target class를 상속받아 생성하므로 open을 통한 상속 가능한 상태이어야 한다.
     // https://cheese10yun.github.io/spring-kotlin
     id 'org.jetbrains.kotlin.plugin.spring' version '1.6.21'
+    // QueryDSL
+    id 'org.jetbrains.kotlin.kapt' version '1.6.21'
 }
 
 group = 'com.group'
@@ -28,6 +30,13 @@ dependencies {
     // Kotlin에서 HTTP 요청 시에 JSON parse error 해결
     // 기존의 Jackson 라이브러리는 Java를 위한 것
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.13.3'
+
+    // QueryDSL
+    implementation 'com.querydsl:querydsl-jpa:5.0.0'
+    kapt("com.querydsl:querydsl-apt:5.0.0:jpa")
+    kapt("org.springframework.boot:spring-boot-configuration-processor")
+
+
     runtimeOnly 'com.h2database:h2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
