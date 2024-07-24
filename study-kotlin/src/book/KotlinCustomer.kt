@@ -8,12 +8,15 @@ class KotlinCustomer {
         // 코틀린에서는 const가 붙지 않더라도 companion object에 정의된 변수에 바로 접근할 수 있다.
         const val NAME = "KotlinCustomer"
 
-        @JvmStatic // 자바에서 코틀린의 companion object에 접근하기 위해서 사용하는 애너테이션
+        @JvmStatic // @JvmStatic을 사용하면 staic 변수의 게터와 세터를 자동으로 생성한다.
         fun call() {
             println("name = ${NAME}")
         }
 
-        @JvmField // 자바에서 코틀린의 companion object에 정의된 변수에 접근할 수 있다.
+        @JvmStatic // 자바에서 getAge(), setAge()를 사용할 수 있다.
+        var age: Int = 10
+
+        @JvmField // @JvmField를 사용하면 staic 변수의 게터와 세터를 자동으로 생성하지 않는다.
         var name: String = "aa"
     }
 }
