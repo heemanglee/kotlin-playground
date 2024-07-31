@@ -73,7 +73,7 @@ jobs:
             export DB_USER=${{ secrets.DB_USER }}
             export DB_PASSWORD=${{ secrets.DB_PASSWORD }}
             export REDIS_HOST=${{ secrets.REDIS_HOST }}
-            export REDIS_PASSWORD=${{ secrets.REDIS_PORT }}
+            export REDIS_PORT=${{ secrets.REDIS_PORT }}
             export OPEN_API_KEY=${{ secrets.OPEN_API_KEY }}
             export AWS_BUCKET=${{ secrets.BUCKET_NAME }}
             export ACCESS_KEY=${{ secrets.ACCESS_KEY }}
