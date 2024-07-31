@@ -75,7 +75,7 @@ jobs:
             export REDIS_HOST=${{ secrets.REDIS_HOST }}
             export REDIS_PASSWORD=${{ secrets.REDIS_PORT }}
             export OPEN_API_KEY=${{ secrets.OPEN_API_KEY }}
-            export BUCKET_NAME=${{ secrets.BUCKET_NAME }}
+            export AWS_BUCKET=${{ secrets.BUCKET_NAME }}
             export ACCESS_KEY=${{ secrets.ACCESS_KEY }}
             export SECRET_KEY=${{ secrets.SECRET_KEY }}
             nohup java -jar project.jar --spring.profiles.active=prod > ./output.log 2>&1 &
