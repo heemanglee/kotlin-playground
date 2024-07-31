@@ -25,6 +25,16 @@ jobs:
       - name: 테스트 및 빌드하기
         run: ./gradlew clean build
         working-directory: ./written-me
+        env:
+          DB_URL: ${{ secrets.DB_URL }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          REDIS_HOST: ${{ secrets.REDIS_HOST }}
+          REDIS_PORT: ${{ secrets.REDIS_PORT }}
+          OPEN_API_KEY: ${{ secrets.OPEN_API_KEY }}
+          BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+          ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
       - name: 빌드된 파일 이름 변경하기
         run: mv ./build/libs/*SNAPSHOT.jar ./project.jar
