@@ -8,6 +8,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      working-directory: ./written-me
     steps:
       - name: Github Repository 파일 불러오기
         uses: actions/checkout@v4
