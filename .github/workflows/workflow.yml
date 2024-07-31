@@ -20,6 +20,7 @@ jobs:
           
       - name: MySQL 실행
         run: docker-compose up -d
+        working-directory: ./written-me
 
       - name: gradlew 파일에 실행 권한 부여
         run: chmod +x ./gradlew
